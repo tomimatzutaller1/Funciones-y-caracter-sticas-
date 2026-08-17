@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolución histórica de los Sistemas Operativos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#16110C;
+    --panel:#221A12;
+    --panel-2:#2A2016;
+    --line:#3A2E20;
+    --text:#F3EBDD;
+    --muted:#A99885;
+    --amber:#FFB238;
+    --amber-dim:#7A5620;
+    --teal:#5FD3C4;
+    --radius:10px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Source Serif 4', serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,178,56,.06) 1px, transparent 1px),
+      radial-gradient(1px 1px at 70% 65%, rgba(255,178,56,.05) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+  ::selection{background:var(--amber); color:#16110C;}
+
+  .wrap{max-width:980px;margin:0 auto;padding:0 32px;}
+
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--amber);
+  }
+
+  h1,h2,h3{
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(22,17,12,.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:980px;margin:0 auto;padding:16px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{
+    font-family:'Space Mono',monospace;
+    font-weight:700;font-size:15px;
+    display:flex;align-items:center;gap:9px;
+    color:var(--amber);
+  }
+  .brand-dot{width:8px;height:8px;background:var(--amber);border-radius:50%; box-shadow:0 0 8px var(--amber);}
+  .backlink{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    color:var(--muted);
+    text-decoration:none;
+  }
+  .backlink:hover{color:var(--amber);}
+
+  .hero{padding:80px 0 56px; position:relative;}
+  .hero::after{
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(560px 260px at 50% 0%, rgba(255,178,56,.10), transparent 65%);
+    pointer-events:none;
+  }
+  .hero .wrap{position:relative;}
+  .hero h1{
+    font-size:clamp(28px,4.4vw,44px);
+    line-height:1.15;
+    margin:18px 0 20px;
+    max-width:16ch;
+  }
+  .hero p.lead{
+    color:var(--muted);
+    font-size:17.5px;
+    max-width:56ch;
+  }
+
+  /* CRT strip signature */
+  .crt-strip{
+    margin-top:44px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#0F0B07;
+    padding:16px 20px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    color:var(--amber);
+    overflow:hidden;
+    white-space:nowrap;
+    position:relative;
+  }
+  .crt-strip::before{
+    content:'▍';
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  .hero-photo{
+    position:relative;
+    margin-top:36px;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    aspect-ratio:16/6;
+  }
+  .hero-photo img{
+    width:100%;height:100%;object-fit:cover;
+    display:block;
+    filter:sepia(.22) saturate(.85) contrast(1.05);
+  }
+  .hero-photo::after{
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(22,17,12,0) 45%, rgba(22,17,12,.9) 100%);
+  }
+  @media (max-width:640px){ .hero-photo{aspect-ratio:16/10;} }
+
+  section{padding:0 0 88px;}
+  .section-head{max-width:60ch; margin-bottom:40px;}
+  .section-head h2{font-size:clamp(22px,3vw,28px); margin-top:12px; color:var(--text);}
+  .section-head p{color:var(--muted); margin-top:12px; font-size:15.5px; font-family:'Source Serif 4',serif;}
+
+  /* TIMELINE — genuinely chronological, numbering is meaningful */
+  .timeline{
+    position:relative;
+    padding-left:52px;
+    border-left:2px solid var(--line);
+  }
+  .era{
+    position:relative;
+    padding-bottom:56px;
+  }
+  .era:last-child{padding-bottom:0;}
+  .era::before{
+    content:'';
+    position:absolute;
+    left:-59px; top:2px;
+    width:14px;height:14px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--amber-dim);
+    transition:border-color .3s, box-shadow .3s;
+  }
+  .era.on::before{
+    border-color:var(--amber);
+    box-shadow:0 0 0 5px rgba(255,178,56,.14);
+  }
+  .era-period{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    color:var(--amber);
+    letter-spacing:.04em;
+    margin-bottom:6px;
+    display:block;
+  }
+  .era h3{
+    font-size:20px;
+    color:var(--text);
+    margin-bottom:10px;
+  }
+  .era p{
+    color:var(--muted);
+    font-size:15px;
+    max-width:62ch;
+    font-family:'Source Serif 4',serif;
+  }
+  .era-photo{
+    margin-top:16px;
+    border-radius:8px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    max-width:420px;
+    aspect-ratio:16/10;
+  }
+  .era-photo img{
+    width:100%;height:100%;object-fit:cover;
+    display:block;
+    filter:sepia(.18) saturate(.9);
+  }
+  .era-photo.svg-holder{
+    background:#0F0B07;
+    display:flex;align-items:center;justify-content:center;
+    aspect-ratio:16/9;
+  }
+  .era-photo.svg-holder img{
+    object-fit:contain;
+    width:88%;height:88%;
+    filter:none;
+  }
+  .photo-credit-sm{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--muted);
+    text-decoration:none;
+    margin-top:6px;
+  }
+  .photo-credit-sm:hover{color:var(--amber);}
+
+  .era .tags{
+    margin-top:14px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .era .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--muted);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:4px 11px;
+  }
+  .era-icon{
+    position:absolute;
+    right:0; top:0;
+    width:54px;height:54px;
+    opacity:.5;
+  }
+  @media (max-width:720px){ .era-icon{display:none;} }
+
+  /* transitional color across eras: cool teal creeps in toward the present */
+  .era[data-i="6"] .era-period, .era[data-i="7"] .era-period{color:var(--teal);}
+  .era[data-i="6"]::before, .era[data-i="7"]::before{border-color:var(--teal);}
+  .era[data-i="6"].on::before, .era[data-i="7"].on::before{box-shadow:0 0 0 5px rgba(95,211,196,.16); border-color:var(--teal);}
+
+  /* pull quote / closing */
+  .close-panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:36px 40px;
+    margin-top:8px;
+  }
+  .close-panel p{
+    font-family:'Source Serif 4',serif;
+    font-size:17px;
+    color:var(--text);
+    max-width:62ch;
+  }
+  .close-panel span{color:var(--amber); font-family:'Space Mono',monospace; font-size:12px; display:block; margin-bottom:12px; letter-spacing:.1em;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:32px 0 48px;
+  }
+  footer .wrap{
+    display:flex;justify-content:space-between;align-items:center;
+    color:var(--muted); font-size:13px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  footer a.prev{color:var(--amber); text-decoration:none;}
+  @media (max-width:600px){
+    footer .wrap{flex-direction:column;gap:12px;text-align:center;}
+    .timeline{padding-left:38px;}
+    .era::before{left:-45px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="brand-dot"></span> evolución.SO</div>
+    <a class="backlink" href="funciones-caracteristicas.html">← funciones y características</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Línea de tiempo · 1945 — presente</div>
+      <h1>De las tarjetas perforadas a la nube.</h1>
+      <p class="lead">Los sistemas operativos se construyeron por generaciones: cada una resolvió el problema técnico que dejó la anterior.</p>
+      <div class="crt-strip mono">BOOTING HISTORY.SYS — 8 GENERACIONES DETECTADAS — CARGANDO CRONOLOGÍA...</div>
+
+      <div class="hero-photo">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Punched%20card%20program%20deck.agr.jpg" alt="Tarjetas perforadas, símbolo de la computación temprana" loading="lazy">
+        <a class="photo-credit-sm" href="https://commons.wikimedia.org/wiki/File:Punched_card_program_deck.agr.jpg" target="_blank" rel="noopener" style="position:absolute; right:12px; bottom:10px; color:#F3EBDD;">Foto: Wikimedia Commons (CC BY-SA)</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Cronología</div>
+        <h2>Ocho generaciones de sistemas operativos</h2>
+        <p>Cada etapa está marcada por el problema técnico que resolvió: velocidad de operación, aprovechamiento del procesador, interacción con el usuario o comunicación en red.</p>
+      </div>
+
+      <div class="timeline">
+
+        <div class="era on" data-i="1">
+          <span class="era-period">1945 – 1955 · SIN SISTEMA OPERATIVO</span>
+          <h3>Programación directa al hardware</h3>
+          <p>Computadoras como la ENIAC se programaban a mano, con tableros de conexiones. No existía software intermedio: un operador controlaba el hardware de forma exclusiva.</p>
+          <div class="era-photo">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Classic%20shot%20of%20the%20ENIAC.jpg" alt="La ENIAC, una de las primeras computadoras electrónicas" loading="lazy">
+          </div>
+          <a class="photo-credit-sm" href="https://commons.wikimedia.org/wiki/File:Classic_shot_of_the_ENIAC.jpg" target="_blank" rel="noopener">Foto: Wikimedia Commons (dominio público)</a>
+          <div class="tags"><span class="tag">tarjetas perforadas</span><span class="tag">un solo usuario</span><span class="tag">sin abstracción</span></div>
+        </div>
+
+        <div class="era on" data-i="2">
+          <span class="era-period">Años 50 · PROCESAMIENTO POR LOTES</span>
+          <h3>Batch processing y el monitor residente</h3>
+          <p>Los trabajos se agrupaban en lotes y se ejecutaban en secuencia. Apareció el "monitor residente": un programa fijo en memoria, antecedente directo del SO moderno.</p>
+          <div class="era-photo">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Punched%20card%20program%20deck.agr.jpg" alt="Mazo de tarjetas perforadas usado para programar por lotes" loading="lazy">
+          </div>
+          <a class="photo-credit-sm" href="https://commons.wikimedia.org/wiki/File:Punched_card_program_deck.agr.jpg" target="_blank" rel="noopener">Foto: Wikimedia Commons (CC BY-SA)</a>
+          <div class="tags"><span class="tag">monitor residente</span><span class="tag">FMS, IBSYS</span><span class="tag">tarjetas y cintas</span></div>
+        </div>
+
+        <div class="era on" data-i="3">
+          <span class="era-period">Años 60 · MULTIPROGRAMACIÓN Y TIEMPO COMPARTIDO</span>
+          <h3>Varios programas, un mismo procesador</h3>
+          <p>La multiprogramación aprovechó los tiempos muertos del CPU. El tiempo compartido fue más allá: repartió el procesador entre varios usuarios conectados a la vez.</p>
+          <div class="tags"><span class="tag">CTSS</span><span class="tag">Multics</span><span class="tag">time-sharing</span></div>
+        </div>
+
+        <div class="era on" data-i="4">
+          <span class="era-period">1969 – 1979 · UNIX Y LA PORTABILIDAD</span>
+          <h3>Un sistema pensado para viajar entre máquinas</h3>
+          <p>UNIX, nacido en los Bell Labs, se escribió casi por completo en lenguaje C. Eso lo hizo portable entre distintos hardwares y sentó las bases de los sistemas actuales.</p>
+          <div class="era-photo svg-holder">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Unix%20history-simple.svg" alt="Árbol genealógico de los sistemas operativos tipo Unix" loading="lazy">
+          </div>
+          <a class="photo-credit-sm" href="https://commons.wikimedia.org/wiki/File:Unix_history-simple.svg" target="_blank" rel="noopener">Diagrama: Wikimedia Commons (CC BY-SA)</a>
+          <div class="tags"><span class="tag">UNIX</span><span class="tag">lenguaje C</span><span class="tag">portabilidad</span></div>
+        </div>
+
+        <div class="era on" data-i="5">
+          <span class="era-period">Años 80 · LA COMPUTADORA PERSONAL</span>
+          <h3>El sistema operativo llega al escritorio</h3>
+          <p>MS-DOS trajo el SO de línea de comandos al hogar. Poco después, el Macintosh popularizó la interfaz gráfica: ventanas, íconos y mouse.</p>
+          <div class="era-photo">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Macintosh%20128k%20computer%2C%20January%201984%2C%20by%20Bernard%20Gotfryd%20-%20(cropped%20to%20remove%20individual).jpg" alt="Computadora Macintosh 128k de 1984" loading="lazy">
+          </div>
+          <a class="photo-credit-sm" href="https://commons.wikimedia.org/wiki/File:Macintosh_128k_computer,_January_1984,_by_Bernard_Gotfryd_-_(cropped_to_remove_individual).jpg" target="_blank" rel="noopener">Foto: Wikimedia Commons (dominio público)</a>
+          <div class="tags"><span class="tag">MS-DOS</span><span class="tag">Macintosh</span><span class="tag">interfaz gráfica</span></div>
+        </div>
+
+        <div class="era on" data-i="6">
+          <span class="era-period">Años 90 – 2000 · REDES Y CÓDIGO ABIERTO</span>
+          <h3>Sistemas robustos, conectados y compartidos</h3>
+          <p>Windows NT llevó estabilidad y redes a las empresas. Linux, libre e inspirado en UNIX, impulsó una comunidad abierta que hoy sostiene buena parte de los servidores del mundo.</p>
+          <div class="tags"><span class="tag">Windows NT</span><span class="tag">Linux / GNU</span><span class="tag">código abierto</span></div>
+        </div>
+
+        <div class="era on" data-i="7">
+          <span class="era-period">2007 – 2015 · LA ERA MÓVIL</span>
+          <h3>El sistema operativo cabe en un bolsillo</h3>
+          <p>El iPhone y, después, Android llevaron el SO a dispositivos táctiles con batería y memoria limitadas, y a un ecosistema propio de apps.</p>
+          <div class="tags"><span class="tag">iOS</span><span class="tag">Android</span><span class="tag">apps táctiles</span></div>
+        </div>
+
+        <div class="era on" data-i="8">
+          <span class="era-period">2010 – ACTUALIDAD · NUBE Y VIRTUALIZACIÓN</span>
+          <h3>El sistema operativo se vuelve invisible</h3>
+          <p>Hoy el cómputo vive en servidores, máquinas virtuales, contenedores y objetos cotidianos (IoT). El SO ya no está solo en un escritorio: opera de fondo, a gran escala.</p>
+          <div class="era-photo">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Datacenter%20Server%20Racks%20(22370909788).jpg" alt="Racks de servidores en un centro de datos moderno" loading="lazy">
+          </div>
+          <a class="photo-credit-sm" href="https://commons.wikimedia.org/wiki/File:Datacenter_Server_Racks_(22370909788).jpg" target="_blank" rel="noopener">Foto: Wikimedia Commons (CC BY 2.0)</a>
+          <div class="tags"><span class="tag">cloud computing</span><span class="tag">virtualización</span><span class="tag">IoT</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="close-panel">
+        <span class="mono">// NOTA FINAL</span>
+        <p>Cada generación no reemplazó del todo a la anterior: heredó sus ideas y las llevó a un nuevo contexto. Del monitor residente al kernel de Linux corriendo en un contenedor hay una línea directa de decisiones de diseño que siguen presentes en cualquier sistema operativo actual.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>02 / 02 — evolución histórica</span>
+    <a class="prev" href="funciones-caracteristicas.html">← funciones y características</a>
+  </div>
+</footer>
+
+</body>
+</html>
